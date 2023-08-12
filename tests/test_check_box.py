@@ -1,7 +1,7 @@
 """Содержит тесты страницы checkbox"""
 from pages.check_box_page import CheckBoxPage
 from pages.main_page import MainPage
-from src.texts import Texts, ErrMsg
+from src.texts import Texts
 
 
 class TestCheckBox:

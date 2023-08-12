@@ -18,29 +18,23 @@ from config import Hosts
 from pages.main_page import MainPage
 
 
-@pytest.fixture
+@pytest.fixture(params=["Chrome", "Firefox"])
 def driver(request) -> Generator[WebDriver]:
     """
     Создаёт инстанс браузера с заданными параметрами
     --headless=new - headless режим браузера(в версии chrome 110+ необходим
-    параметр 'new' для корректного определения дефолтной директории)
-    --no-sandbox - Добавляется только в том случае,
-    если установлена системная переменная окружения CI,
-     если пользователь в системе Linux не установлен, или при выполнении внутри контейнера Docker.
-    Отключает песочницу для всех типов процессов, которые обычно находятся в песочнице.
-    Используется только в качестве переключателя на уровне браузера в целях тестирования.
-    --disable-dev-shm-usage - Добавляется только при установленной переменной
-    системного окружения CI или внутри экземпляра docker.
-    Раздел /dev/shm слишком мал в некоторых средах виртуальных машин,
-    что приводит к сбою или отказу Chrome"""
-    options = webdriver.ChromeOptions()
-    # options.add_argument("--headless=new")
-    options.add_argument('--ignore-certificate-errors-spki-list')
-    options.add_argument('--ignore-ssl-errors')
-    options.add_argument('--no-sandbox')
-    options.add_argument("--disable-dev-shm-usage")
-    service = ChromeService(ChromeDriverManager().install())
-    browser = webdriver.Chrome(service=service, options=options)
+    параметр 'new' для корректного определения дефолтной директории)"""
+    browser = None
+    if request.param == "Chrome":
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless=new")
+        service = ChromeService(ChromeDriverManager().install())
+        browser = webdriver.Chrome(service=service, options=options)
+    elif request.param == "Firefox":
+        options = webdriver.FirefoxOptions()
+        options.add_argument("--headless")
+        service = FirefoxService(GeckoDriverManager().install())
+        browser = webdriver.Firefox(service=service, options=options)
     browser.set_window_size(1920, 1080)
     yield browser
     browser.quit()
