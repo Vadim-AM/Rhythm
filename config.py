@@ -3,6 +3,7 @@
 
 class Config:
     """Таймауты"""
+
     total_timeout = 5
 
 

@@ -7,7 +7,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from config import Config, Hosts
+from config import Config
 
 
 class BasePage:
@@ -15,8 +15,8 @@ class BasePage:
 
     def __init__(self, driver: WebDriver, timeout: int = Config.total_timeout) -> None:
         self.driver = driver
-        self.url = Hosts.demo_qa_host
-        self.wait = WebDriverWait(self.driver, timeout, poll_frequency=1.5)
+        self.url = None
+        self.wait = WebDriverWait(self.driver, timeout)
 
     def open(self) -> BasePage:
         """Открывает заданную страницу"""
